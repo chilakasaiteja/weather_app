@@ -1,39 +1,40 @@
-// app.js
-const apiKey = 'b516329a87d70acc2ab25ac9e8da3249'; // Your API key
+const apiKey = 'b516329a87d70acc2ab25ac9e8da3249';
 
-function getWeather() {
+async function getWeather() {
   const city = document.getElementById('city').value;
-  
+  const weatherInfo = document.getElementById('weather-info');
+  const cityNameElement = document.getElementById('city-name');
+  const temperatureElement = document.getElementById('temperature');
+  const descriptionElement = document.getElementById('description');
+
+  // Clear previous error or weather data
+  weatherInfo.style.display = 'none';
+  cityNameElement.textContent = '';
+  temperatureElement.textContent = '';
+  descriptionElement.textContent = '';
+
   if (city === '') {
     alert('Please enter a city name');
     return;
   }
 
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+  try {
+    const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`);
 
-  fetch(url)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('City not found');
-      }
-      return response.json();
-    })
-    .then(data => {
-      displayWeather(data);
-    })
-    .catch(error => {
-      alert(error.message);
-    });
-}
+    if (!response.ok) {
+      throw new Error('City not found');
+    }
 
-function displayWeather(data) {
-  const cityName = data.name;
-  const temperature = data.main.temp;
-  const description = data.weather[0].description;
+    const data = await response.json();
+    const temperature = data.main.temp;
+    const description = data.weather[0].description;
 
-  document.getElementById('city-name').textContent = `Weather in ${cityName}`;
-  document.getElementById('temperature').textContent = `Temperature: ${temperature}°C`;
-  document.getElementById('description').textContent = `Description: ${description}`;
-
-  document.getElementById('weather-info').style.display = 'block';
+    // Update the DOM with weather data
+    cityNameElement.textContent = `Weather in ${data.name}`;
+    temperatureElement.textContent = `Temperature: ${temperature}°C`;
+    descriptionElement.textContent = `Condition: ${description.charAt(0).toUpperCase() + description.slice(1)}`;
+    weatherInfo.style.display = 'block';
+  } catch (error) {
+    alert(error.message);
+  }
 }
