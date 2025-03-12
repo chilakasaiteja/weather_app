@@ -5,35 +5,45 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Weather App</title>
   <style>
-    /* Basic styling for the app */
     body {
       font-family: Arial, sans-serif;
-      margin: 20px;
+      margin: 0;
       padding: 0;
-      background-color: #f4f4f4;
+      background-image: url('https://source.unsplash.com/1600x900/?weather');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      color: white;
     }
 
-    h1 {
-      font-size: 2rem;
+    .container {
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 20px;
+      margin: 0 auto;
+      max-width: 600px;
+      border-radius: 10px;
     }
 
-    input {
-      padding: 10px;
-      font-size: 1rem;
+    h1, input, button {
+      text-align: center;
+    }
+
+    input, button {
+      margin: 10px;
     }
 
     button {
-      padding: 10px 15px;
-      font-size: 1rem;
-      background-color: #28a745;
+      background-color: #007bff;
       color: white;
       border: none;
+      padding: 10px 15px;
+      font-size: 1rem;
       cursor: pointer;
-      margin-left: 10px;
+      border-radius: 5px;
     }
 
     button:hover {
-      background-color: #218838;
+      background-color: #0056b3;
     }
 
     #weather-info {
@@ -43,32 +53,50 @@
     .forecast-day {
       display: flex;
       align-items: center;
-      margin: 10px 0;
+      justify-content: space-between;
       padding: 10px;
-      border: 1px solid #ccc;
+      margin: 10px 0;
       border-radius: 5px;
-      background-color: #f9f9f9;
+      background-color: rgba(255, 255, 255, 0.3);
     }
 
     .forecast-day p {
-      margin: 0 10px;
+      margin: 0;
+    }
+
+    .forecast-day img {
+      width: 50px;
+      height: 50px;
+    }
+
+    .sunny {
+      background-color: rgba(255, 223, 0, 0.5);
+    }
+
+    .rainy {
+      background-color: rgba(0, 119, 190, 0.5);
+    }
+
+    .cloudy {
+      background-color: rgba(150, 150, 150, 0.5);
+    }
+
+    .clear {
+      background-color: rgba(135, 206, 235, 0.5);
     }
   </style>
 </head>
 <body>
-  <h1>Weather App</h1>
+  <div class="container">
+    <h1>Weather App</h1>
 
-  <!-- Input field for entering city name -->
-  <input type="text" id="city" placeholder="Enter city name">
-  <!-- Button to get weather by city name -->
-  <button onclick="getWeather()">Get Weather</button>
-  <!-- Button to get weather using geolocation -->
-  <button onclick="getWeatherByLocation()">Use My Location</button>
+    <input type="text" id="city" placeholder="Enter city name">
+    <button onclick="getWeather()">Get Weather</button>
+    <button onclick="getWeatherByLocation()">Use My Location</button>
 
-  <!-- Div to display weather information -->
-  <div id="weather-info"></div>
+    <div id="weather-info"></div>
+  </div>
 
-  <!-- Link to the JavaScript file -->
   <script src="app.js"></script>
 </body>
 </html>

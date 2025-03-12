@@ -40,19 +40,19 @@ async function fetchWeatherData(apiUrl) {
 
     // Display 5-day forecast (one forecast per day at 12:00 PM)
     for (let i = 0; i < forecastList.length; i += 8) {
-      const forecast = forecastList[i]; // Data for one day (every 8th element corresponds to a new day)
+      const forecast = forecastList[i]; 
       const date = new Date(forecast.dt * 1000).toLocaleDateString();
       const temperature = forecast.main.temp;
       const description = forecast.weather[0].description;
       const iconCode = forecast.weather[0].icon;
 
-      // Create elements for each day's forecast
       const forecastElement = document.createElement('div');
       forecastElement.classList.add('forecast-day');
+      forecastElement.classList.add(getWeatherClass(description.toLowerCase())); // Add the weather class
 
       const dateElement = document.createElement('p');
       dateElement.textContent = `Date: ${date}`;
-      
+
       const tempElement = document.createElement('p');
       tempElement.textContent = `Temp: ${temperature}°C`;
 
@@ -62,18 +62,28 @@ async function fetchWeatherData(apiUrl) {
       const iconElement = document.createElement('img');
       iconElement.src = `http://openweathermap.org/img/wn/${iconCode}@2x.png`;
       iconElement.alt = description;
-      iconElement.style.width = '50px'; // Adjust icon size
 
-      // Append elements to the forecast div
       forecastElement.appendChild(dateElement);
       forecastElement.appendChild(tempElement);
       forecastElement.appendChild(descElement);
       forecastElement.appendChild(iconElement);
 
-      // Append the forecast to the weatherInfo div
       weatherInfo.appendChild(forecastElement);
     }
   } catch (error) {
     alert(error.message);
   }
+}
+
+function getWeatherClass(description) {
+  if (description.includes('sun')) {
+    return 'sunny';
+  } else if (description.includes('rain')) {
+    return 'rainy';
+  } else if (description.includes('cloud')) {
+    return 'cloudy';
+  } else if (description.includes('clear')) {
+    return 'clear';
+  }
+  return '';
 }
