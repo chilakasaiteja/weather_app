@@ -5,60 +5,41 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Weather App</title>
   <style>
+    /* Basic styling for the app */
     body {
-      font-family: 'Arial', sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-      color: #fff;
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      padding: 0;
+      background-color: #f4f4f4;
     }
-    .container {
-      text-align: center;
-      background-color: rgba(0, 0, 0, 0.3);
-      padding: 40px;
-      border-radius: 15px;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-    }
-    
+
     h1 {
-      font-size: 2.5rem;
-      margin-bottom: 20px;
+      font-size: 2rem;
     }
+
     input {
       padding: 10px;
-      margin: 20px 0;
-      width: 250px;
-      border: none;
-      border-radius: 5px;
       font-size: 1rem;
-      outline: none;
     }
+
     button {
-      padding: 12px 20px;
+      padding: 10px 15px;
+      font-size: 1rem;
       background-color: #28a745;
       color: white;
       border: none;
-      border-radius: 5px;
-      font-size: 1rem;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      margin-left: 10px;
     }
+
     button:hover {
       background-color: #218838;
     }
+
     #weather-info {
       margin-top: 20px;
-      padding: 20px;
-      background-color: rgba(255, 255, 255, 0.2);
-      border-radius: 10px;
-      display: none;
     }
-    #weather-info h2, #weather-info p {
-      margin: 5px 0;
-    }
+
     .forecast-day {
       display: flex;
       align-items: center;
@@ -75,19 +56,19 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Simple Weather App</h1>
-    <input type="text" id="city" placeholder="Enter city name">
-    <button onclick="getWeather()">Get Weather</button>
-    <button onclick="getWeatherByLocation()">Get Weather by Current Location</button> <!-- New button -->
+  <h1>Weather App</h1>
 
-    <div id="weather-info">
-      <h2 id="city-name"></h2>
-      <p id="temperature"></p>
-      <p id="description"></p>
-    </div>
-  </div>
+  <!-- Input field for entering city name -->
+  <input type="text" id="city" placeholder="Enter city name">
+  <!-- Button to get weather by city name -->
+  <button onclick="getWeather()">Get Weather</button>
+  <!-- Button to get weather using geolocation -->
+  <button onclick="getWeatherByLocation()">Use My Location</button>
 
+  <!-- Div to display weather information -->
+  <div id="weather-info"></div>
+
+  <!-- Link to the JavaScript file -->
   <script src="app.js"></script>
 </body>
 </html>
