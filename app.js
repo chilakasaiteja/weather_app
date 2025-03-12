@@ -6,7 +6,7 @@ async function getWeather() {
     alert('Please enter a city name');
     return;
   }
-  fetchWeatherData(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`);
+  fetchWeatherData(`https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric`);
 }
 
 async function getWeatherByLocation() {
@@ -14,7 +14,7 @@ async function getWeatherByLocation() {
     navigator.geolocation.getCurrentPosition(async (position) => {
       const lat = position.coords.latitude;
       const lon = position.coords.longitude;
-      fetchWeatherData(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`);
+      fetchWeatherData(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`);
     }, () => {
       alert('Unable to retrieve your location');
     });
@@ -25,16 +25,7 @@ async function getWeatherByLocation() {
 
 async function fetchWeatherData(apiUrl) {
   const weatherInfo = document.getElementById('weather-info');
-  const cityNameElement = document.getElementById('city-name');
-  const temperatureElement = document.getElementById('temperature');
-  const descriptionElement = document.getElementById('description');
-  const humidityElement = document.createElement('p');
-  const windElement = document.createElement('p');
-  const iconElement = document.createElement('img'); // New element for weather icon
-
-  // Clear previous data
-  weatherInfo.style.display = 'none';
-  weatherInfo.innerHTML = ''; 
+  weatherInfo.innerHTML = ''; // Clear previous data
 
   try {
     const response = await fetch(apiUrl);
@@ -44,34 +35,44 @@ async function fetchWeatherData(apiUrl) {
     }
 
     const data = await response.json();
-    const temperature = data.main.temp;
-    const description = data.weather[0].description;
-    const humidity = data.main.humidity;
-    const windSpeed = data.wind.speed;
-    const iconCode = data.weather[0].icon; // Get icon code
+    const city = data.city.name;
+    const forecastList = data.list;
 
-    // Update the DOM with weather data
-    cityNameElement.textContent = `Weather in ${data.name}`;
-    temperatureElement.textContent = `Temperature: ${temperature}°C`;
-    descriptionElement.textContent = `Condition: ${description.charAt(0).toUpperCase() + description.slice(1)}`;
+    // Display 5-day forecast (one forecast per day at 12:00 PM)
+    for (let i = 0; i < forecastList.length; i += 8) {
+      const forecast = forecastList[i]; // Data for one day (every 8th element corresponds to a new day)
+      const date = new Date(forecast.dt * 1000).toLocaleDateString();
+      const temperature = forecast.main.temp;
+      const description = forecast.weather[0].description;
+      const iconCode = forecast.weather[0].icon;
 
-    humidityElement.textContent = `Humidity: ${humidity}%`;
-    windElement.textContent = `Wind Speed: ${windSpeed} m/s`;
+      // Create elements for each day's forecast
+      const forecastElement = document.createElement('div');
+      forecastElement.classList.add('forecast-day');
 
-    // Set the weather icon (use OpenWeatherMap icon URL format)
-    iconElement.src = `http://openweathermap.org/img/wn/${iconCode}@2x.png`;
-    iconElement.alt = description;
-    iconElement.style.width = '100px'; // Adjust icon size as needed
+      const dateElement = document.createElement('p');
+      dateElement.textContent = `Date: ${date}`;
+      
+      const tempElement = document.createElement('p');
+      tempElement.textContent = `Temp: ${temperature}°C`;
 
-    // Append weather data to the DOM
-    weatherInfo.appendChild(cityNameElement);
-    weatherInfo.appendChild(temperatureElement);
-    weatherInfo.appendChild(descriptionElement);
-    weatherInfo.appendChild(humidityElement);
-    weatherInfo.appendChild(windElement);
-    weatherInfo.appendChild(iconElement); // Append the icon
+      const descElement = document.createElement('p');
+      descElement.textContent = `Condition: ${description.charAt(0).toUpperCase() + description.slice(1)}`;
 
-    weatherInfo.style.display = 'block';
+      const iconElement = document.createElement('img');
+      iconElement.src = `http://openweathermap.org/img/wn/${iconCode}@2x.png`;
+      iconElement.alt = description;
+      iconElement.style.width = '50px'; // Adjust icon size
+
+      // Append elements to the forecast div
+      forecastElement.appendChild(dateElement);
+      forecastElement.appendChild(tempElement);
+      forecastElement.appendChild(descElement);
+      forecastElement.appendChild(iconElement);
+
+      // Append the forecast to the weatherInfo div
+      weatherInfo.appendChild(forecastElement);
+    }
   } catch (error) {
     alert(error.message);
   }
