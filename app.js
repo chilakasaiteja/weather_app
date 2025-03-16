@@ -71,7 +71,7 @@ async function fetchWeatherData(apiUrl) {
       weatherInfo.appendChild(forecastElement);
     }
   } catch (error) {
-    alert(error.message);
+    alert(error.message)
   }
 }
 
